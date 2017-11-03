@@ -20,6 +20,7 @@ ENV HEADERS_MORE_VERSION 0.32
 ENV OPENSSL_VERSION 1.1.0f
 
 COPY ./bin/download_pagespeed.sh /tmp/download_pagespeed.sh
+RUN	chmod a+x /tmp/download_pagespeed.sh
 
 RUN  useradd -r -s /usr/sbin/nologin nginx && mkdir -p /var/log/nginx /var/cache/nginx && \
 	apt-get update && \
@@ -28,7 +29,6 @@ RUN  useradd -r -s /usr/sbin/nologin nginx && mkdir -p /var/log/nginx /var/cache
 	wget --no-check-certificate -O - http://nginx.org/download/nginx-${NGINX_VERSION}.tar.gz --progress=bar --tries=3 | tar zxf - -C /tmp && \
 	echo "Downloading headers-more ${HEADERS_MORE_VERSION} from https://github.com/openresty/headers-more-nginx-module/archive/v${HEADERS_MORE_VERSION}.tar.gz ..." && \
 	wget --no-check-certificate -O - https://github.com/openresty/headers-more-nginx-module/archive/v${HEADERS_MORE_VERSION}.tar.gz --progress=bar  --tries=3 | tar zxf - -C /tmp && \
-	chmod a+x /tmp/download_pagespeed.sh && \
 	/tmp/download_pagespeed.sh && \
 	echo "Downloading openssl v${OPENSSL_VERSION} from https://www.openssl.org/source/openssl-${OPENSSL_VERSION}.tar.gz ..." && wget --no-check-certificate -O - https://www.openssl.org/source/openssl-${OPENSSL_VERSION}.tar.gz  --progress=bar --tries=3 | tar xzf  - -C /tmp && \
 	cd /tmp/nginx-${NGINX_VERSION} && \
